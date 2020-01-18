@@ -5,12 +5,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "FARMER_PRODUCT")
 public class FarmerProduct 
 {
+	private FarmerPojo farmer;
 	private Integer p_Id;
 	private String p_category;
 	private String p_name;
@@ -24,9 +27,12 @@ public class FarmerProduct
 	  System.out.println("In Farmer Product pojo default constructor");	
 	}
 
-	public FarmerProduct(Integer p_Id, String p_category, String p_name, double p_price, int p_quantity,
-			String p_quality) {
+	
+    
+	public FarmerProduct(FarmerPojo farmer, Integer p_Id, String p_category, String p_name, double p_price,
+			int p_quantity, String p_quality) {
 		super();
+		this.farmer = farmer;
 		this.p_Id = p_Id;
 		this.p_category = p_category;
 		this.p_name = p_name;
@@ -34,7 +40,9 @@ public class FarmerProduct
 		this.p_quantity = p_quantity;
 		this.p_quality = p_quality;
 	}
-    
+
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "PRODUCT_ID")
@@ -74,8 +82,21 @@ public class FarmerProduct
 	{
 		return p_quality;
 	}
-
 	
+	@ManyToOne
+	@JoinColumn(name="FARMER_ID")
+	public FarmerPojo getFarmer() {
+		return farmer;
+	}
+
+
+
+	public void setFarmer(FarmerPojo farmer) {
+		this.farmer = farmer;
+	}
+
+
+
 	public void setP_Id(Integer p_Id) 
 	{
 		this.p_Id = p_Id;

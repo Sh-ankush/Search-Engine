@@ -1,14 +1,21 @@
 package pojos;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
@@ -37,6 +44,8 @@ public class FarmerPojo {
 	
 	private String f_password;
 	
+	private List<FarmerProduct> products = new ArrayList<FarmerProduct>(); 
+	
 	public FarmerPojo()
 	{
 		super();
@@ -44,10 +53,10 @@ public class FarmerPojo {
 		
 	}
 	
-	
+
 	public FarmerPojo(Integer f_Id, String f_name, String f_adhaarId, String f_email, String f_contact,
-			String f_address, String f_city, String f_state, String f_pincode, String f_password)
-	{
+			String f_address, String f_city, String f_state, String f_pincode, String f_password,
+			List<FarmerProduct> products) {
 		super();
 		this.f_Id = f_Id;
 		this.f_name = f_name;
@@ -59,7 +68,10 @@ public class FarmerPojo {
 		this.f_state = f_state;
 		this.f_pincode = f_pincode;
 		this.f_password = f_password;
+		this.products = products;
 	}
+
+
 
 
 	public void setF_Id(Integer f_Id) 
@@ -112,9 +124,20 @@ public class FarmerPojo {
 		this.f_name = f_name;
 	}
 
-	
+	public void setProducts(List<FarmerProduct> products) {
+		this.products = products;
+	}
+
+	@OneToMany(mappedBy = "farmer",orphanRemoval=true, cascade = CascadeType.ALL)
+   
+	public List<FarmerProduct> getProducts() {
+		return products;
+	}
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "FARMER_ID")
 	public Integer getF_Id() 
 	{
 		return f_Id;
@@ -127,16 +150,13 @@ public class FarmerPojo {
 		return f_name;
 	}
 
-
-
-
-	
 	@NotNull
-	@Column(name="ADHAAR_ID",length = 12,unique = true, nullable = false)
+	@Column(name="FARMER_ADHAARID",length = 12,unique = true, nullable = false)
 	public String getF_adhaarId() {
 		return f_adhaarId;
 	}
 	
+	@Email
 	@Column(name="FARMER_EMAIL",length = 50)
 	public String getF_email()
 	{

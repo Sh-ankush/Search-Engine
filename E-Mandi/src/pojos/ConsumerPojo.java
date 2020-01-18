@@ -1,13 +1,20 @@
 package pojos;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
 
 @Entity
 @Table(name="CONSUMERS")
@@ -27,6 +34,7 @@ public class ConsumerPojo
 	private String c_state;
 	private String c_pincode;
 	private String c_password;
+	private List<ConsumerRequirement> requirements = new ArrayList<>();
 	
 	
 	public ConsumerPojo() 
@@ -35,10 +43,11 @@ public class ConsumerPojo
          System.out.println("In Consumer default pojo constructor");
 	}
 	
-	
+
+
 	public ConsumerPojo(int c_Id, int c_pan, String c_name, String c_email, String c_company, String c_address,
-			String c_contact, String c_city, String c_state, String c_pincode, String c_password)
-	{
+			String c_contact, String c_city, String c_state, String c_pincode, String c_password,
+			List<ConsumerRequirement> requirements) {
 		super();
 		this.c_Id = c_Id;
 		this.c_pan = c_pan;
@@ -51,6 +60,7 @@ public class ConsumerPojo
 		this.c_state = c_state;
 		this.c_pincode = c_pincode;
 		this.c_password = c_password;
+		this.requirements = requirements;
 	}
 
 
@@ -109,8 +119,21 @@ public class ConsumerPojo
 		this.c_password = c_password;
 	}
 	
+
+	public void setRequirements(List<ConsumerRequirement> requirements) 
+	{
+		this.requirements = requirements;
+	}
+	
+	@OneToMany(mappedBy = "consumer",orphanRemoval=true, cascade = CascadeType.ALL)
+	public List<ConsumerRequirement> getRequirements() 
+	{
+		return requirements;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "CONSUMER_ID")
 	public int getC_Id()
 	{
 		return c_Id;
@@ -130,7 +153,7 @@ public class ConsumerPojo
 		return c_pan;
 	}
 
-
+	@Email
     @NotNull
 	@Column(name="CONSUMER_EMAIL",length = 30,nullable = false)
 	public String getC_email() 

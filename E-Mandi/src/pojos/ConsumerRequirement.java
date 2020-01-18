@@ -3,50 +3,48 @@ package pojos;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="CONSUMERS_REQUIREMENT")
 public class ConsumerRequirement 
 {
-	private Integer p_Id;//join from product table
-	private String c_id;//join from consumer table
+	//private Integer p_Id;//join from product table
+	//private String c_id;//join from consumer table
 	private int c_requirement_id;
-	private String c_pcategory;//need to be normalized
-	private String c_pname;//need to be normalized
-	private String c_pquantity;//need to be normalized
-	private String c_pquality;//need to be normalized
-	private LocalDate c_expected_date;//need to be normalized
+	private String c_pcategory;
+	private String c_pname;
+	private String c_pquantity;
+	private String c_pquality;
+	private LocalDate c_expected_date;
+	private ConsumerPojo consumer;
 	
 	public ConsumerRequirement() {
 		super();
 		System.out.println("Inside CosumerRequirement");
 	}
 
-	public ConsumerRequirement(Integer p_Id, String c_id, int c_requirement_id, String c_pcategory, String c_pname,
-			String c_pquantity, String c_pquality, LocalDate c_expected_date) {
+	public ConsumerRequirement(int c_requirement_id, String c_pcategory, String c_pname, String c_pquantity,
+			String c_pquality, LocalDate c_expected_date, ConsumerPojo consumer) {
 		super();
-		this.p_Id = p_Id;
-		this.c_id = c_id;
 		this.c_requirement_id = c_requirement_id;
 		this.c_pcategory = c_pcategory;
 		this.c_pname = c_pname;
 		this.c_pquantity = c_pquantity;
 		this.c_pquality = c_pquality;
 		this.c_expected_date = c_expected_date;
-	}
-
-	//join table
-	public Integer getP_Id() {
-		return p_Id;
-	}
-	//join table
-	public String getC_id() {
-		return c_id;
+		this.consumer = consumer;
 	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "REQUIREMENT_ID")
 	public int getC_requirement_id() {
 		return c_requirement_id;
 	}
@@ -72,14 +70,20 @@ public class ConsumerRequirement
 	public LocalDate getC_expected_date() {
 		return c_expected_date;
 	}
-
-	public void setP_Id(Integer p_Id) {
-		this.p_Id = p_Id;
+	
+	@ManyToOne
+	@JoinColumn(name="CONSUMER_ID")
+	public ConsumerPojo getConsumer() {
+		return consumer;
 	}
 
-	public void setC_id(String c_id) {
-		this.c_id = c_id;
+
+
+	public void setConsumer(ConsumerPojo consumer) {
+		this.consumer = consumer;
 	}
+
+
 
 	public void setC_requirement_id(int c_requirement_id) {
 		this.c_requirement_id = c_requirement_id;
@@ -105,12 +109,16 @@ public class ConsumerRequirement
 		this.c_expected_date = c_expected_date;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "ConsumerRequirement [p_Id=" + p_Id + ", c_id=" + c_id + ", c_requirement_id=" + c_requirement_id
-				+ ", c_pcategory=" + c_pcategory + ", c_pname=" + c_pname + ", c_pquantity=" + c_pquantity
-				+ ", c_pquality=" + c_pquality + ", c_expected_date=" + c_expected_date + "]";
+		return "ConsumerRequirement [c_requirement_id=" + c_requirement_id + ", c_pcategory=" + c_pcategory
+				+ ", c_pname=" + c_pname + ", c_pquantity=" + c_pquantity + ", c_pquality=" + c_pquality
+				+ ", c_expected_date=" + c_expected_date + ", consumer=" + consumer + "]";
 	}
+
+	
 	
 	
 	
